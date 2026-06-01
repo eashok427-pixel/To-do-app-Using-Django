@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Task Manager</title>
+  <style>
+    body { font-family: sans-serif; max-width: 500px; margin: 50px auto; }
+    input { padding: 8px; width: 70%; border: 1px solid #ccc; border-radius: 4px; }
+    button { padding: 8px 14px; background: #4f46e5; color: white; border: none; border-radius: 4px; cursor: pointer; }
+    li { padding: 10px; margin: 6px 0; background: #f3f4f6; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; }
+    .done span { text-decoration: line-through; color: #aaa; }
+    a { margin-left: 8px; text-decoration: none; font-size: 18px; }
+  </style>
+</head>
+<body>
+  <h2>&#128203; My Tasks</h2>
+  <form method="post">
+    {% csrf_token %}
+    <input name="title" placeholder="New task..." required />
+    <button type="submit">Add</button>
+  </form>
+  <ul style="padding:0; margin-top:20px; list-style:none;">
+    {% for task in tasks %}
+      <li class="{% if task.done %}done{% endif %}">
+        <span>{{ task.title }}</span>
+        <div>
+          <a href="/toggle/{{ task.pk }}/" title="Complete" style="color: green;">&#10004;</a>
+          <a href="/delete/{{ task.pk }}/" title="Delete" style="color: red;">&#10006;</a>
+        </div>
+      </li>
+    {% empty %}
+      <p style="color:#aaa;">No tasks yet!</p>
+    {% endfor %}
+  </ul>
+</body>
+</html>
